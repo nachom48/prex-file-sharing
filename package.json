@@ -1,0 +1,51 @@
+{
+  "name": "prex",
+  "version": "1.0.0",
+  "description": "File Sharing System",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "test": "jest",
+    "test:unit": "npm run clean && jest --testPathPattern=unit",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:e2e": "set NODE_ENV=test && jest --testPathPattern=e2e",
+    "build": "npx tsc",
+    "clean": "rimraf dist",
+    "start:debug": "nodemon --exec \"node --inspect -r ts-node/register\" src/index.ts",
+    "typeorm": "typeorm-ts-node-commonjs -d ./src/config/database.ts",
+    "migration:create": "cross-var typeorm-ts-node-commonjs migration:create ./src/migrations/$npm_config_name",
+    "migration:generate": "cross-var npm run typeorm migration:generate ./src/migrations/$npm_config_name",
+    "migration:show": "npm run typeorm migration:show",
+    "migration:run": "npm run typeorm migration:run",
+    "migration:revert": "npm run typeorm migration:revert"
+  },
+  "author": "Ignacio Muñoz",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.645.0",
+    "bcryptjs": "^2.4.3",
+    "class-validator": "^0.14.1",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.4",
+    "pg": "^8.12.0",
+    "sqlite3": "^5.1.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/multer": "^1.4.12",
+    "@types/supertest": "^6.0.2",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
+    "cross-var": "^1.1.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5"
+  }
+}
