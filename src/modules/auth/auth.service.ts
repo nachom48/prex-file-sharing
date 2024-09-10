@@ -1,17 +1,16 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { UnauthorizedException } from '../../common/exceptions/unathorized-exception';
-import { UserService } from './../user/user.service';
 import { SignInDTO } from './dto/sign-in.dto';
 import SignUpDTO from './dto/sign-up.dto';
+import IAuthUserService from './interface/auth-user-service.interface';
 
 export class AuthService {
-  private userService: UserService;
+  private userService: IAuthUserService;
 
-   constructor(userService: UserService) {
-    this.userService = userService;
+   constructor(authUserService: IAuthUserService) {
+    this.userService = authUserService;
   }
-
 
   public async signUp(signUpDto: SignUpDTO) {
     // Delegar la creación del usuario al UserService
