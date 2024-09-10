@@ -8,12 +8,12 @@ import IAuthUserService from './interface/auth-user-service.interface';
 export class AuthService {
   private userService: IAuthUserService;
 
-   constructor(authUserService: IAuthUserService) {
+  constructor(authUserService: IAuthUserService) {
     this.userService = authUserService;
   }
 
   public async signUp(signUpDto: SignUpDTO) {
-    // Delegar la creación del usuario al UserService
+
     const user = await this.userService.createUser(signUpDto);
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
@@ -22,6 +22,7 @@ export class AuthService {
   }
 
   public async signIn(signInDto: SignInDTO) {
+
     const user = await this.userService.findOne({ where: { email: signInDto.email } });
 
     if (!user || !(await bcrypt.compare(signInDto.password, user.password))) {

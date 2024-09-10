@@ -1,13 +1,12 @@
-// src/services/common.service.ts
 import { DeepPartial, FindManyOptions, FindOneOptions, FindOptionsWhere, SaveOptions } from 'typeorm';
 import { ICommonService } from './interfaces/common.service.interface';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'; 
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { ICommonRepository } from './interfaces/common.repository.interface';
 
 export const DEFAULT_TAKE = 25;
 
 export default class CommonService<T> implements ICommonService<T> {
-    constructor(protected readonly repository: ICommonRepository<T>) {}
+    constructor(protected readonly repository: ICommonRepository<T>) { }
 
     public findOne(options: FindOneOptions<T>): Promise<T | null> {
         return this.repository.findOne(options);
@@ -42,7 +41,7 @@ export default class CommonService<T> implements ICommonService<T> {
         return this.repository.softDelete(criteria);
     }
 
-    public async update(id: string, data: QueryDeepPartialEntity<T>): Promise<T> { 
+    public async update(id: string, data: QueryDeepPartialEntity<T>): Promise<T> {
         await this.repository.update(id, data);
         const updatedEntity = await this.repository.findOne({ where: { id } as unknown as FindOptionsWhere<T> });
         if (!updatedEntity) {

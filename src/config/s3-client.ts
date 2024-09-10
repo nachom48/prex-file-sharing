@@ -1,4 +1,3 @@
-// src/config/s3-client.ts
 import { S3Client } from '@aws-sdk/client-s3';
 
 export class S3ClientSingleton {

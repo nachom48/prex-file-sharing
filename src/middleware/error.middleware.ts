@@ -1,4 +1,3 @@
-// src/middleware/error.middleware.ts
 import { Request, Response, NextFunction } from 'express';
 import { CustomError } from '../common/exceptions/custom-error';
 import { ValidationError } from 'class-validator';

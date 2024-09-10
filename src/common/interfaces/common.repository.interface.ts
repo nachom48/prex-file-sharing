@@ -1,4 +1,3 @@
-// src/interfaces/common.repository.interface.ts
 import { DeepPartial, FindManyOptions, FindOneOptions, FindOptionsWhere, SaveOptions, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 

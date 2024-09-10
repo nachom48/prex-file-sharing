@@ -1,4 +1,3 @@
-// src/controllers/common.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import { NotFoundException } from '../common/exceptions/not-found-exception';
 import { BadRequestException } from '../common/exceptions/bad-request-exception';

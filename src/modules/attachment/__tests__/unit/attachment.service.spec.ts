@@ -26,19 +26,16 @@ describe('AttachmentService Unit Tests', () => {
     let dataSource: DataSource;
 
     beforeAll(async () => {
-        // Inicializa la conexión a la base de datos solo una vez antes de todas las pruebas
         dataSource = await testDataSource.initialize();
     });
 
     afterAll(async () => {
-        // Cierra la conexión después de todas las pruebas
         if (dataSource.isInitialized) {
             await dataSource.destroy();
         }
     });
 
     beforeEach(() => {
-        // Inicializa los mocks antes de cada prueba
         mockS3Client = new S3Client({}) as jest.Mocked<S3Client>;
         mockUserService = new UserService(new UserRepository(dataSource)) as jest.Mocked<UserService>;
         mockAttachmentRepository = new AttachmentRepository(dataSource) as jest.Mocked<AttachmentRepository>;
@@ -46,7 +43,6 @@ describe('AttachmentService Unit Tests', () => {
     });
 
     afterEach(async () => {
-        // Limpia las tablas después de cada prueba para evitar conflictos
         if (dataSource.isInitialized) {
             const entities = dataSource.entityMetadatas;
             for (const entity of entities) {
@@ -234,7 +230,7 @@ describe('AttachmentService Unit Tests', () => {
                 deleteDate: null,
                 attachments: [],
                 receivedAttachments: []
-            } as unknown as UserEntity ]
+            } as unknown as UserEntity]
 
             mockAttachmentRepository.findOne.mockResolvedValue(attachmentMock);
             mockUserService.findByIds.mockResolvedValue(usersMock);

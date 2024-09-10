@@ -1,4 +1,3 @@
-// src/interfaces/common.service.interface.ts
 import { DeepPartial, FindManyOptions, FindOneOptions, FindOptionsWhere, SaveOptions } from 'typeorm';
 
 export interface ICommonService<T> {
@@ -8,5 +7,4 @@ export interface ICommonService<T> {
     findAndCount(options?: FindManyOptions<T>): Promise<[T[], number]>;
     list(options: { page: number } & FindManyOptions<T>): Promise<{ results: T[]; count: number }>;
     delete(criteria: string | string[] | FindOptionsWhere<T>): Promise<void>;
-    // Otros métodos comunes
 }

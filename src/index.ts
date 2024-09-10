@@ -4,7 +4,7 @@ import authRoutes from './modules/auth/auth.routes';
 import errorMiddleware from './middleware/error.middleware';
 import attachmentRoutes from './modules/attachment/attachment.routes';
 import { AppDataSource } from './config/database';
-import { setupSwagger } from './config/swagger'; // Importa la configuración de Swagger desde la carpeta config
+import { setupSwagger } from './config/swagger';
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-setupSwagger(app); 
+setupSwagger(app);
 
 AppDataSource.initialize()
   .then(() => {
