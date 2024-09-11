@@ -252,6 +252,7 @@ For a complete reference of all API endpoints, access the Swagger documentation 
 - **End-to-End (E2E) Tests:** Develop E2E tests to validate the entire application's functionality from a user's perspective.
 - **SonarQube Integration:** Integrate SonarQube for continuous code quality and security checks to maintain high coding standards.
 
+
 ## Contact
 
 For any questions or suggestions, feel free to reach out via [GitHub Issues](https://github.com/nachom48/prex-file-sharing/issues).
