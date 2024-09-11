@@ -4,7 +4,7 @@ export class InitialMigration1725662251708 implements MigrationInterface {
     name = 'InitialMigration1725662251708'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        // await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
+        await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
         await queryRunner.query(` CREATE TABLE "attachment" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdBy" character varying NOT NULL, "createdDate" TIMESTAMP NOT NULL DEFAULT now(), "lastModifiedDate" TIMESTAMP NOT NULL DEFAULT now(), "lastModifiedBy" character varying, "deleteDate" TIMESTAMP, "fileName" character varying NOT NULL, "fileKey" character varying NOT NULL, "s3Url" character varying NOT NULL, "userId" uuid, CONSTRAINT "PK_d2a80c3a8d467f08a750ac4b420" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdBy" character varying NOT NULL, "createdDate" TIMESTAMP NOT NULL DEFAULT now(), "lastModifiedDate" TIMESTAMP NOT NULL DEFAULT now(), "lastModifiedBy" character varying, "deleteDate" TIMESTAMP, "userName" character varying NOT NULL, "email" character varying NOT NULL, "password" character varying NOT NULL, CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "received_attachments" ("attachment_id" uuid NOT NULL, "user_id" uuid NOT NULL, CONSTRAINT "PK_8ec9138875d991fc7f693c64a42" PRIMARY KEY ("attachment_id", "user_id"))`);
