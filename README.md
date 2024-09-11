@@ -38,15 +38,11 @@ The system follows a modular architecture using Node.js and Express, with TypeSc
 
 ### Structure
 
-- **Modules:** Each feature (e.g., Authentication, Attachments) is organized as a separate module. This improves maintainability and scalability.
+- **Modules:** Each feature (e.g., Authentication, Attachments,User) is organized as a separate module. This improves maintainability and scalability.
 - **Routes:** Each module defines its own routes to handle specific API endpoints.
 - **Controllers:** Controllers manage the incoming requests and interact with the appropriate services to process the logic.
 - **Services:** Services contain the core business logic and interact with the database through repositories.
 - **Repositories:** Repositories handle the data access logic, interacting with the database using TypeORM.
-
-### Diagram of Architecture
-
-![Architecture Diagram](imagen.png)
 
 ## Database Schema
 
@@ -70,7 +66,7 @@ The application uses a PostgreSQL database with the following schema:
 
 ### Diagram of Database Schema
 
-![Database Schema Diagram](imagen.png)
+![Database Schema Diagram](https://easyupload.io/zkr6ai)
 
 ## Getting Started
 
@@ -145,19 +141,58 @@ The server should now be running on `http://localhost:3000`.
   - `POST /api/attachments/share` - Share a file with other users.
   - `GET /api/attachments/download/:id` - Download a file.
 
+
 ## Testing
 
-1. To run the unit and integration tests, execute:
+The tests performed are unit tests and are located in the `__tests__/unit` folder within each module of the project. Below are the unit tests for the `AuthService` and `AttachmentService`.
 
-    ```bash
-    npm test
-    ```
+### Unit Tests for AuthService
 
-2. To run end-to-end tests:
+The unit tests for `AuthService` include:
 
-    ```bash
-    npm run test:e2e
-    ```
+- **Sign In Function:**
+  - Verifies that a user can successfully log in with valid credentials.
+  - Throws an `UnauthorizedException` if the user is not found.
+  - Throws an `UnauthorizedException` if the password is incorrect.
+
+- **Sign Up Function:**
+  - Verifies that a new user can be created successfully and returns an access token.
+  - Throws an error if user creation fails.
+
+### Unit Tests for AttachmentService
+
+The unit tests for `AttachmentService` include:
+
+- **uploadFile:**
+  - Verifies that a file can be uploaded successfully and that the saved file is returned.
+  - Throws an `EntityNotFoundException` if the user is not found.
+
+- **deleteFile:**
+  - Verifies that a file can be deleted successfully.
+  - Throws an `EntityNotFoundException` if the file is not found.
+  - Throws an `UnauthorizedException` if the user does not have permission to delete the file.
+
+- **updateFileName:**
+  - Verifies that the file name can be updated successfully.
+  - Throws an `EntityNotFoundException` if the file is not found.
+  - Throws an `UnauthorizedException` if the user does not have permission to update the file.
+
+- **listUserAttachments:**
+  - Verifies that a list of user attachments and shared attachments is returned.
+
+- **shareFile:**
+  - Verifies that a file can be shared successfully with other users.
+
+- **downloadFile:**
+  - Verifies that a file can be downloaded successfully.
+  - Throws an `UnauthorizedException` if the user does not have permission to download the file.
+
+### Running Tests
+
+To run the unit tests, use the following command:
+
+```bash
+npm test    
 
 Make sure to configure the `NODE_ENV` to `test` to use the test database and ensure proper cleanup.
 
