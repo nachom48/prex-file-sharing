@@ -11,18 +11,18 @@ A server-side file sharing system built with Node.js, Express, TypeScript, and A
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Running the Application](#running-the-application)
+  - [Deployment with Docker](#deployment-with-docker)
+    - [Building the Docker Image](#building-the-docker-image)
+  - [Running the Docker Container](#running-the-docker-container)
 - [Usage](#usage)
   - [API Endpoints](#api-endpoints)
 - [Testing](#testing)
-- [Deployment with Docker](#deployment-with-docker)
-  - [Building the Docker Image](#building-the-docker-image)
-  - [Running the Docker Container](#running-the-docker-container)
 - [Postman Collection](#postman-collection)
 - [API Documentation](#api-documentation)
 - [Design Decisions](#design-decisions)
 - [Contact](#contact)
 
-## Features Done
+## Features
 
 - **User Authentication:** Users can sign up and log in to access the application's functionalities.
 - **File Upload:** Users can upload files, and each file is associated with the uploader's username and creation date.
@@ -34,15 +34,19 @@ A server-side file sharing system built with Node.js, Express, TypeScript, and A
 
 ## Architecture
 
-The system follows a modular architecture using Node.js and Express, with TypeScript for static typing. 
+The system follows a modular architecture using Node.js and Express, with TypeScript for static typing.
 
 ### Structure
 
-- **Modules:** Each feature (e.g., Authentication, Attachments,User) is organized as a separate module. This improves maintainability and scalability.
+- **Modules:** Each feature (e.g., Authentication, Attachments, User) is organized as a separate module to improve maintainability and scalability.
 - **Routes:** Each module defines its own routes to handle specific API endpoints.
-- **Controllers:** Controllers manage the incoming requests and interact with the appropriate services to process the logic.
-- **Services:** Services contain the core business logic and interact with the database through repositories.
-- **Repositories:** Repositories handle the data access logic, interacting with the database using TypeORM.
+- **Controllers:** Manage incoming requests and delegate the business logic to the appropriate services.
+- **Services:** Contain the core business logic and interact with the database through repositories.
+- **Repositories:** Handle the data access logic, interacting with the database using TypeORM.
+
+### Diagram of Architecture
+
+![Architecture Diagram](imagen.png)
 
 ## Database Schema
 
@@ -123,6 +127,35 @@ The application uses a PostgreSQL database with the following schema:
     npm start
     ```
 
+## Deployment with Docker
+
+### Building the Docker Image
+
+1. Ensure Docker is installed and running on your machine.
+2. Create and configure your `.env` file with the necessary environment variables as mentioned earlier. **Set `DB_HOST=db` instead of `localhost`.**
+3. Build the Docker image:
+
+    ```bash
+    docker-compose build
+    ```
+
+### Running the Docker Container
+
+1. Run the Docker container using Docker Compose:
+
+    ```bash
+    docker-compose up
+    ```
+
+   This command will start the application and the PostgreSQL database in separate containers. The server will be accessible at [http://localhost:3000](http://localhost:3000).
+
+2. To stop and remove the containers, run:
+
+    ```bash
+    docker-compose down
+    ```
+
+
 The server should now be running on `http://localhost:3000`.
 
 ## Usage
@@ -141,14 +174,11 @@ The server should now be running on `http://localhost:3000`.
   - `POST /api/attachments/share` - Share a file with other users.
   - `GET /api/attachments/download/:id` - Download a file.
 
-
 ## Testing
 
 The tests performed are unit tests and are located in the `__tests__/unit` folder within each module of the project. Below are the unit tests for the `AuthService` and `AttachmentService`.
 
 ### Unit Tests for AuthService
-
-The unit tests for `AuthService` include:
 
 - **Sign In Function:**
   - Verifies that a user can successfully log in with valid credentials.
@@ -160,8 +190,6 @@ The unit tests for `AuthService` include:
   - Throws an error if user creation fails.
 
 ### Unit Tests for AttachmentService
-
-The unit tests for `AttachmentService` include:
 
 - **uploadFile:**
   - Verifies that a file can be uploaded successfully and that the saved file is returned.
@@ -192,48 +220,9 @@ The unit tests for `AttachmentService` include:
 To run the unit tests, use the following command:
 
 ```bash
-npm test    
+npm test
+```
 
-Make sure to configure the `NODE_ENV` to `test` to use the test database and ensure proper cleanup.
-
-## Deployment with Docker
-
-### Building the Docker Image
-
-1. Ensure Docker is installed and running on your machine.
-2. Create and configure your `.env` file with the necessary environment variables as mentioned earlier.
-
-3. Build the Docker image:
-
-    ```bash
-    docker-compose build
-    ```
-
-### Running the Docker Container
-
-1. Run the Docker container using Docker Compose:
-
-    ```bash
-    docker-compose up
-    ```
-
-This command will start the application and the PostgreSQL database in separate containers. The server will be accessible at `http://localhost:3000`.
-
-2. To stop and remove the containers, run:
-
-    ```bash
-    docker-compose down
-    ```
-
-### Docker Configuration Details
-
-- The Docker setup uses a multi-stage build to create an optimized production image:
-  - **Build Stage:** Installs dependencies and builds the TypeScript code.
-  - **Production Stage:** Copies the build output and required files to a minimal Node.js image.
-
-- The `docker-compose.yml` file defines two services:
-  - `app`: The main application container running Node.js.
-  - `db`: A PostgreSQL database container.
 
 ## Postman Collection
 
@@ -245,16 +234,16 @@ For a complete reference of all API endpoints, access the Swagger documentation 
 
 ## Design Decisions
 
-1. **TypeScript for Static Typing:** TypeScript was chosen to leverage static typing, which helps catch errors during development and improve code quality.
-2. **Modular Architecture:** The system is divided into modules (authentication, attachments) to ensure separation of concerns and enhance maintainability.
-3. **Routes:** Handle the different API endpoints and delegate request processing to appropriate controllers.
-4. **Controllers:** Manage the incoming requests and interact with the appropriate services to process the business logic.
-5. **Services:** Contain the core business logic and handle interactions with the database through repositories.
-6. **Repositories:** Responsible for data access logic, interacting with the database using TypeORM.
-7. **Use of AWS S3 for Storage:** AWS S3 is used to store files due to its scalability, durability, and security features.
-8. **PostgreSQL for Data Persistence:** PostgreSQL was selected for its robust support for relational data and ACID compliance.
-9. **Docker for Containerization:** Docker and Docker Compose are used to ensure consistency across different environments and facilitate deployment.
-10. **Use of TypeORM:** TypeORM is employed as the ORM to interact with PostgreSQL, simplifying database operations and migration management.
+- **TypeScript for Static Typing:** Chosen to leverage static typing, which helps catch errors during development and improves code quality.
+- **Modular Architecture:** Divided into modules (authentication, attachments) to ensure separation of concerns and enhance maintainability.
+- **Routes:** Handle the different API endpoints and delegate request processing to appropriate controllers.
+- **Controllers:** Manage the incoming requests and interact with the appropriate services to process the business logic.
+- **Services:** Contain the core business logic and handle interactions with the database through repositories.
+- **Repositories:** Responsible for data access logic, interacting with the database using TypeORM.
+- **Use of AWS S3 for Storage:** AWS S3 is used to store files due to its scalability, durability, and security features.
+- **PostgreSQL for Data Persistence:** PostgreSQL was selected for its robust support for relational data and ACID compliance.
+- **Docker for Containerization:** Docker and Docker Compose are used to ensure consistency across different environments and facilitate deployment.
+- **Use of TypeORM:** TypeORM is employed as the ORM to interact with PostgreSQL, simplifying database operations and migration management.
 
 ## Contact
 

@@ -1,0 +1,19 @@
+# Application Environment
+PORT=3000
+
+# Database Configuration
+DB_HOST=db  # Use 'db' when running with Docker; use 'localhost' for local development
+DB_PORT=5432
+DB_USERNAME=your_database_username
+DB_PASSWORD=your_database_password
+DB_NAME=prex
+DB_NAME_TEST=prex_test
+
+# JWT Secret
+JWT_SECRET=your_jwt_secret
+
+# AWS S3 Configuration
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_REGION=us-east-1
+S3_BUCKET_NAME=prexback
