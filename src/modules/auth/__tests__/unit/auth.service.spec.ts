@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { AuthService } from './../../auth.service';
-import IAuthUserService from './../../interface/auth-user-service.interface';
-import { SignInDTO } from './../../dto/sign-in.dto';
-import { UnauthorizedException } from './../../../../common/exceptions/unathorized-exception'
+import { AuthService } from '../../auth.service';
+import IAuthUserService from '../../interface/auth-user-service.interface';
+import { SignInDTO } from '../../dto/sign-in.dto';
+import { UnauthorizedException } from '../../../../common/exceptions/unathorized-exception'
 import SignUpDTO from '../../dto/sign-up.dto';
 
 jest.mock('bcryptjs');
@@ -52,7 +52,7 @@ describe('Auth Service Unit Testing', () => {
   });
 
   describe('Testing Sign Up Function', () => {
-    const signUpDto: SignUpDTO = { email: 'newuser@example.com', password: 'newpassword123',userName:'johnDoe' };
+    const signUpDto: SignUpDTO = { email: 'newuser@example.com', password: 'newpassword123', userName: 'johnDoe' };
     const userMock = { id: 1, email: 'newuser@example.com' };
 
     test('Create user successfully and return token', async () => {

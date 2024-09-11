@@ -5,6 +5,8 @@ module.exports = {
   testEnvironment: 'node',
   testMatch: [
     "**/__tests__/**/*.ts",
-    "**/?(*.)+(spec|test).ts"
-  ]
+    "**/?(*.)+(spec|test).ts",
+    "**/e2e/**/*.ts"
+  ],
+  testTimeout: 30000
 };

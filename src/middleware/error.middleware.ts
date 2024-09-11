@@ -3,10 +3,8 @@ import { CustomError } from '../common/exceptions/custom-error';
 import { ValidationError } from 'class-validator';
 
 const errorMiddleware = (error: any, req: Request, res: Response, next: NextFunction) => {
-    console.log('Error captured in middleware:', error); // Debugging
 
     if (error instanceof CustomError) {
-        console.log('CustomError detected:', error.message); // Debugging
         return res.status(error.statusCode).json({ message: error.message });
     }
 
