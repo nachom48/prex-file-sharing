@@ -20,6 +20,7 @@ A server-side file sharing system built with Node.js, Express, TypeScript, and A
 - [Postman Collection](#postman-collection)
 - [API Documentation](#api-documentation)
 - [Design Decisions](#design-decisions)
+- [Future Enhancements](#future-enhancements)
 - [Contact](#contact)
 
 ## Features
@@ -244,6 +245,12 @@ For a complete reference of all API endpoints, access the Swagger documentation 
 - **PostgreSQL for Data Persistence:** PostgreSQL was selected for its robust support for relational data and ACID compliance.
 - **Docker for Containerization:** Docker and Docker Compose are used to ensure consistency across different environments and facilitate deployment.
 - **Use of TypeORM:** TypeORM is employed as the ORM to interact with PostgreSQL, simplifying database operations and migration management.
+
+## Future Enhancements
+
+- **Integration Tests:** Implement integration tests to ensure different parts of the application work together correctly.
+- **End-to-End (E2E) Tests:** Develop E2E tests to validate the entire application's functionality from a user's perspective.
+- **SonarQube Integration:** Integrate SonarQube for continuous code quality and security checks to maintain high coding standards.
 
 ## Contact
 
