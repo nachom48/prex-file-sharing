@@ -17,7 +17,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000', // Cambia según tu entorno
+        url: 'http://localhost:3000',
       },
     ],
     components: {
@@ -44,7 +44,7 @@ const options = {
       },
     },
   },
-  apis: ['./src/modules/**/*.ts'], // Cambia la ruta de acuerdo a tu estructura de archivos
+  apis: ['./src/modules/**/*.ts'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);

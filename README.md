@@ -1,118 +1,226 @@
-Prex - File Sharing System
-📖 Description
+# File Sharing System in Node.js
 
-Prex is a file-sharing system developed as part of a technical assessment. It allows users to sign up, log in, upload files, share them with other users, and perform various file management operations. The application is built using TypeScript, Express.js, TypeORM, PostgreSQL, and AWS S3 for file storage.
-📝 Implementation Decisions
+A server-side file sharing system built with Node.js, Express, TypeScript, and AWS S3. This application allows authenticated users to upload, share, retrieve, and delete files, with robust access management and optional features like file renaming and download support.
 
-    Authentication and Authorization:
-        JWT (JSON Web Tokens) is used for user authentication and authorization. Tokens are generated upon login and used to authorize subsequent requests.
-        bcrypt is used for password hashing, ensuring that user passwords are secure and not stored in plain text.
+## Table of Contents
 
-    File Management:
-        Files uploaded by users are stored in AWS S3 using the AWS SDK for Node.js.
-        Each uploaded file generates a unique key in S3 to avoid collisions and allows easy access to the file via a URL.
+- [Features](#features)
+- [Architecture](#architecture)
+- [Database Schema](#database-schema)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Application](#running-the-application)
+- [Usage](#usage)
+  - [API Endpoints](#api-endpoints)
+- [Testing](#testing)
+- [Deployment with Docker](#deployment-with-docker)
+  - [Building the Docker Image](#building-the-docker-image)
+  - [Running the Docker Container](#running-the-docker-container)
+- [Postman Collection](#postman-collection)
+- [API Documentation](#api-documentation)
+- [Design Decisions](#design-decisions)
+- [Contact](#contact)
 
-    Project Architecture:
-        A modular approach is followed to separate the application's responsibilities. For example, the auth module handles authentication and authorization, while the attachment module manages all file-related operations.
-        A pattern of services and controllers is implemented, where services handle business logic and controllers handle HTTP requests.
+## Features Done
 
-    Testing:
-        Unit tests, integration tests, and end-to-end (e2e) tests are configured using Jest and Supertest to ensure code quality and system functionality.
-        Unit tests verify the functionality of individual components such as services and controllers in isolation.
-        Integration tests ensure that multiple system components work correctly when combined, such as interactions between the API and the database.
-        End-to-end (e2e) tests validate the entire application flow, from client requests to server responses, ensuring that the entire system works as expected.
+- **User Authentication:** Users can sign up and log in to access the application's functionalities.
+- **File Upload:** Users can upload files, and each file is associated with the uploader's username and creation date.
+- **File Sharing:** Users can share files with other registered users.
+- **File Retrieval:** Users can list all their files and those shared with them.
+- **File Deletion:** Users can delete files they have uploaded.
+- **File Download:** Users can download files.
+- **File Renaming:** Users can rename their files.
 
-    API Documentation:
-        Swagger is used to document the API, making it easier for other developers to understand and use the available endpoints.
+## Architecture
 
-📊 Database Diagram
+The system follows a modular architecture using Node.js and Express, with TypeScript for static typing. 
 
-Database Diagram
+### Structure
 
-The system uses PostgreSQL as the primary database, with the following main entities:
+- **Modules:** Each feature (e.g., Authentication, Attachments) is organized as a separate module. This improves maintainability and scalability.
+- **Routes:** Each module defines its own routes to handle specific API endpoints.
+- **Controllers:** Controllers manage the incoming requests and interact with the appropriate services to process the logic.
+- **Services:** Services contain the core business logic and interact with the database through repositories.
+- **Repositories:** Repositories handle the data access logic, interacting with the database using TypeORM.
 
-    User: Stores information about users, including authentication credentials.
-    Attachment: Stores information about files uploaded by users and their storage details in S3.
-    Shared Attachments: An intermediate table that manages the relationships of files shared between users.
+### Diagram of Architecture
 
-🏗️ Architecture Diagram
+![Architecture Diagram](imagen.png)
 
-Architecture Diagram
+## Database Schema
 
-The application follows a modular architecture where each module (auth, attachment, user) has its own controllers, services, entities, and DTOs.
-🚀 Steps to Run the Project
-🛠️ Requirements
+The application uses a PostgreSQL database with the following schema:
 
-    Docker and Docker Compose installed on your machine.
-    Access to AWS with configured credentials to upload files to S3.
-    Node.js (version 19 or higher) installed if running without Docker.
+- **Users Table:**
+  - `id` (Primary Key, UUID)
+  - `userName` (String, Unique)
+  - `email` (String, Unique)
+  - `password` (String, Hashed)
+  - Timestamps for `createdDate`, `lastModifiedDate`, and soft deletion with `deleteDate`.
 
-🔧 Instructions
+- **Attachments Table:**
+  - `id` (Primary Key, UUID)
+  - `fileName` (String)
+  - `fileKey` (String, S3 Object Key)
+  - `s3Url` (String, S3 Object URL)
+  - `createdBy` (String)
+  - Timestamps for `createdDate`, `lastModifiedDate`, and `deleteDate`.
+  - Relationship fields for user ownership and shared access.
 
-    Clone the Repository:
+### Diagram of Database Schema
 
-    bash
+![Database Schema Diagram](imagen.png)
 
-git clone https://github.com/your-username/prex.git
-cd prex
+## Getting Started
 
-Set Up Environment Variables:
+### Prerequisites
 
-Create a .env file in the project's root directory with the following environment variables:
+- Node.js (version 19.9.0)
+- npm (version 6 or higher)
+- Docker and Docker Compose (for containerized deployment)
+- PostgreSQL database
+- AWS Account and S3 bucket configured
 
-env
+### Installation
 
-DB_HOST=db
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=[YOUR_DB_PASSWORD]
-DB_NAME=prex
-PORT=3000
-JWT_SECRET=[YOUR_JWT_SECRET]
-AWS_ACCESS_KEY_ID=[YOUR_AWS_ACCESS_KEY_ID]
-AWS_SECRET_ACCESS_KEY=[YOUR_AWS_SECRET_ACCESS_KEY]
-AWS_REGION=[YOUR_AWS_REGION]
-S3_BUCKET_NAME=[YOUR_S3_BUCKET_NAME]
+1. Clone the repository:
 
-    Make sure to replace the values in square brackets ([]) with your actual credentials and configurations.
+    ```bash
+    git clone https://github.com/nachom48/prex-file-sharing.git
+    cd prex-file-sharing
+    ```
 
-Build and Run the Project with Docker:
+2. Install dependencies:
 
-Run the following command to build and start the Docker containers for the application and the database:
+    ```bash
+    npm install
+    ```
 
-bash
+3. Create a `.env` file based on the `.env.example` file provided in the repository, and update it with your environment-specific settings:
 
-docker-compose up --build
+    ```plaintext
+    NODE_ENV=development
+    PORT=3000
+    DB_HOST=your_database_host
+    DB_PORT=5432
+    DB_USERNAME=your_database_username
+    DB_PASSWORD=your_database_password
+    DB_NAME=your_database_name
+    DB_NAME_TEST=your_test_database_name
+    JWT_SECRET=your_jwt_secret
+    AWS_REGION=your_aws_region
+    S3_BUCKET_NAME=your_s3_bucket_name
+    ```
 
-This will download the necessary images, install dependencies, build the project, and start the services.
+### Running the Application
 
-Access the API Documentation:
+1. Run the database migrations:
 
-Once the containers are running, you can access the Swagger API documentation by navigating to:
+    ```bash
+    npm run migration:run
+    ```
 
-bash
+2. Start the application:
 
-http://localhost:3000/api-docs
+    ```bash
+    npm start
+    ```
 
-From this interface, you can test the API endpoints directly in your browser.
+The server should now be running on `http://localhost:3000`.
 
-Import the Postman Collection:
+## Usage
 
-Import the Postman collection (Prex.postman_collection.json) from the project's root directory into your Postman client. This collection includes examples of all the requests needed to interact with the system, such as:
+### API Endpoints
 
-    Register a new user: Test the /api/auth/signup endpoint.
-    User login: Test the /api/auth/signin endpoint.
-    Upload a file: Test the /api/attachments/upload endpoint.
-    List user files: Test the /api/attachments/list endpoint.
-    Share a file: Test the /api/attachments/share endpoint.
-    Delete a file: Test the /api/attachments/deleteFile/{id} endpoint.
+- **Authentication**
+  - `POST /api/auth/signup` - Register a new user.
+  - `POST /api/auth/signin` - Log in as an existing user.
 
-Run Tests:
+- **File Management**
+  - `POST /api/attachments/upload` - Upload a new file.
+  - `GET /api/attachments/list` - List all user files and shared files.
+  - `DELETE /api/attachments/deleteFile/:id` - Delete a file.
+  - `PUT /api/attachments/:id` - Update a file's name.
+  - `POST /api/attachments/share` - Share a file with other users.
+  - `GET /api/attachments/download/:id` - Download a file.
 
-To run the configured unit, integration, and e2e tests, use the following command:
+## Testing
 
-bash
+1. To run the unit and integration tests, execute:
 
-npm run test
+    ```bash
+    npm test
+    ```
 
-This will execute all tests and provide feedback on the quality and functionality of the system.
+2. To run end-to-end tests:
+
+    ```bash
+    npm run test:e2e
+    ```
+
+Make sure to configure the `NODE_ENV` to `test` to use the test database and ensure proper cleanup.
+
+## Deployment with Docker
+
+### Building the Docker Image
+
+1. Ensure Docker is installed and running on your machine.
+2. Create and configure your `.env` file with the necessary environment variables as mentioned earlier.
+
+3. Build the Docker image:
+
+    ```bash
+    docker-compose build
+    ```
+
+### Running the Docker Container
+
+1. Run the Docker container using Docker Compose:
+
+    ```bash
+    docker-compose up
+    ```
+
+This command will start the application and the PostgreSQL database in separate containers. The server will be accessible at `http://localhost:3000`.
+
+2. To stop and remove the containers, run:
+
+    ```bash
+    docker-compose down
+    ```
+
+### Docker Configuration Details
+
+- The Docker setup uses a multi-stage build to create an optimized production image:
+  - **Build Stage:** Installs dependencies and builds the TypeScript code.
+  - **Production Stage:** Copies the build output and required files to a minimal Node.js image.
+
+- The `docker-compose.yml` file defines two services:
+  - `app`: The main application container running Node.js.
+  - `db`: A PostgreSQL database container.
+
+## Postman Collection
+
+A Postman collection is provided in the repository to test all the API endpoints. You can access it by clicking [here](https://tekko6.postman.co/workspace/prex-file-sharing~8c2a840f-42b8-4a5e-b594-75254355a785/collection/21134239-468811e1-0094-4537-95e7-b0bad2e4e1b0/overview?action=share&creator=21134239&active-environment=21134239-134c0313-8d7e-4a2f-9355-dcd90a06a492&action_performed=google_login&workspaceOnboarding=show).
+
+## API Documentation
+
+For a complete reference of all API endpoints, access the Swagger documentation at [http://localhost:3000/api-docs/](http://localhost:3000/api-docs/).
+
+## Design Decisions
+
+1. **TypeScript for Static Typing:** TypeScript was chosen to leverage static typing, which helps catch errors during development and improve code quality.
+2. **Modular Architecture:** The system is divided into modules (authentication, attachments) to ensure separation of concerns and enhance maintainability.
+3. **Routes:** Handle the different API endpoints and delegate request processing to appropriate controllers.
+4. **Controllers:** Manage the incoming requests and interact with the appropriate services to process the business logic.
+5. **Services:** Contain the core business logic and handle interactions with the database through repositories.
+6. **Repositories:** Responsible for data access logic, interacting with the database using TypeORM.
+7. **Use of AWS S3 for Storage:** AWS S3 is used to store files due to its scalability, durability, and security features.
+8. **PostgreSQL for Data Persistence:** PostgreSQL was selected for its robust support for relational data and ACID compliance.
+9. **Docker for Containerization:** Docker and Docker Compose are used to ensure consistency across different environments and facilitate deployment.
+10. **Use of TypeORM:** TypeORM is employed as the ORM to interact with PostgreSQL, simplifying database operations and migration management.
+
+## Contact
+
+For any questions or suggestions, feel free to reach out via [GitHub Issues](https://github.com/nachom48/prex-file-sharing/issues).
