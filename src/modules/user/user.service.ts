@@ -9,11 +9,11 @@ import { HttpPostException } from './../../common/exceptions/http-post-exception
 
 export class UserService extends CommonService<UserEntity> {
 
-    private userRepository: UserRepository; 
+    private userRepository: UserRepository;
 
-     constructor(userRepository : UserRepository) {
+    constructor(userRepository: UserRepository) {
         super(userRepository);
-        this.userRepository = userRepository; 
+        this.userRepository = userRepository;
     }
 
 
@@ -38,6 +38,7 @@ export class UserService extends CommonService<UserEntity> {
             const { password, ...userWithoutPassword } = user;
             return userWithoutPassword;
         } catch (error) {
+            console.log("este es el error creando usuario", error)
             if (error instanceof EntityAlreadyExistsException) {
                 throw error;
             }
