@@ -3,10 +3,15 @@
 # Fase de desarrollo (Build Stage)
 FROM node:19-alpine as build
 WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
 COPY . .
+RUN npm ci
 RUN npm run build
+
+# Etapa de desarrollo
+FROM node:19-alpine as dev
+WORKDIR /usr/src/app
+COPY . .
+RUN npm ci
 
 # Fase de producción (Production Stage)
 FROM node:19-alpine as deploy
@@ -19,4 +24,9 @@ RUN npm install --production
 
 EXPOSE 3000
 
-CMD ["node", "dist/index.js"]
+# Comando predeterminado
+CMD ["npm", "run", "start"]
+
+# Sobrescribir el comando para la etapa de desarrollo
+FROM dev AS development
+CMD ["npm", "run", "start:debug"]
