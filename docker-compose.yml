@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      target: development
     ports:
       - "3000:3000"
     environment:
@@ -22,11 +22,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: >
-      sh -c "sleep 10 && npm run migration:run && npm run start"  
 
   db:
     image: postgres:latest
+    restart: always
     environment:
       POSTGRES_DB: prex
       POSTGRES_USER: postgres
