@@ -115,13 +115,7 @@ The application uses a PostgreSQL database with the following schema:
 
 ### Running the Application
 
-1. Run the database migrations:
-
-    ```bash
-    npm run migration:run
-    ```
-
-2. Start the application:
+1. Start the application:
 
     ```bash
     npm start
