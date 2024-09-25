@@ -118,7 +118,13 @@ The application uses a PostgreSQL database with the following schema:
 1. Run the database migrations:
 
     ```bash
-    npm run start:dev
+    npm run migration:run
+    ```
+
+2. Start the application:
+
+    ```bash
+    npm start
     ```
 
 ## Deployment with Docker
